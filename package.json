@@ -1,9 +1,8 @@
 {
-  "name": "reactjs-template",
+  "name": "swa",
   "private": true,
   "version": "0.0.1",
   "type": "module",
-  "homepage": "https://Tstsft.github.io/swa",
   "scripts": {
     "deploy": "gh-pages -d dist",
     "dev": "vite",

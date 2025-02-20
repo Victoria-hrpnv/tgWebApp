@@ -3,10 +3,9 @@ import {initData, type User, useSignal} from '@telegram-apps/sdk-react';
 
 import {Page} from '@/components/Page.tsx';
 import {ErrorBlock, ResultPage} from "antd-mobile";
-import {DisplayDataRow} from "@/components/DisplayData/DisplayData.tsx";
 
 
-function getUserRows(user: User): DisplayDataRow[] {
+function getUserRows(user: User): any[] {
     return [
         {title: 'id', value: user.id.toString()},
         {title: 'username', value: user.username},
@@ -25,7 +24,7 @@ export const InitDataPage: FC = () => {
     const initDataRaw = useSignal(initData.raw);
     const initDataState = useSignal(initData.state);
 
-    const initDataRows = useMemo<DisplayDataRow[] | undefined>(() => {
+    const initDataRows = useMemo<any[] | undefined>(() => {
         if (!initDataState || !initDataRaw) {
             return;
         }

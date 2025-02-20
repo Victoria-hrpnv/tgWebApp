@@ -1,8 +1,6 @@
 import {openLink} from '@telegram-apps/sdk-react';
 import {TonConnectButton, useTonWallet} from '@tonconnect/ui-react';
 import type {FC} from 'react';
-
-import {DisplayData} from '@/components/DisplayData/DisplayData.tsx';
 import {Page} from '@/components/Page.tsx';
 
 import './TONConnectPage.css';
