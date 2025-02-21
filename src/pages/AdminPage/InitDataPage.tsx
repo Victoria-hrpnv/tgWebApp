@@ -2,7 +2,7 @@ import {type FC, useMemo} from 'react';
 import {initData, type User, useSignal} from '@telegram-apps/sdk-react';
 
 import {Page} from '@/components/Page.tsx';
-import {ErrorBlock, ResultPage} from "antd-mobile";
+import {ErrorBlock, List, ResultPage} from "antd-mobile";
 
 
 function getUserRows(user: User): any[] {
@@ -51,10 +51,41 @@ export const InitDataPage: FC = () => {
         ];
     }, [initDataState, initDataRaw]);
 
+    const userRows = useMemo<any[] | undefined>(() => {
+        return initDataState && initDataState.user
+            ? getUserRows(initDataState.user)
+            : undefined;
+    }, [initDataState]);
+
+    const receiverRows = useMemo<any[] | undefined>(() => {
+        return initDataState && initDataState.receiver
+            ? getUserRows(initDataState.receiver)
+            : undefined;
+    }, [initDataState]);
+
+    const chatRows = useMemo<any[] | undefined>(() => {
+        if (!initDataState?.chat) {
+            return;
+        }
+        const {
+            id,
+            title,
+            type,
+            username,
+            photoUrl,
+        } = initDataState.chat;
+
+        return [
+            { title: 'id', value: id.toString() },
+            { title: 'title', value: title },
+            { title: 'type', value: type },
+            { title: 'username', value: username },
+            { title: 'photo_url', value: photoUrl },
+        ];
+    }, [initData]);
 
     if (!initDataRows) {
-        return (
-            <Page>
+        return <Page>
                 <ErrorBlock status='busy'>
                     <img
                         alt="Telegram sticker"
@@ -63,16 +94,47 @@ export const InitDataPage: FC = () => {
                     />
                 </ErrorBlock>
             </Page>
-        )
-            ;
     }
+
     return (
         <Page>
             <ResultPage
                 status='success'
-                title='操作成功'
-                description='内容详情可折行，建议不超过两行建议不超过两行建议不超过两行'
-            />
+                title='Клиент'
+                description='данные о телеграмм аккаунте'
+            >
+                {chatRows && <List>
+                    {chatRows.map((item, index: number) => {
+                        return <List.Item
+                            key={index}
+                            description={item.value}
+                        >
+                            {item.title}
+                        </List.Item>
+                    })}
+                </List>}
+                {userRows && <List>
+                    {userRows.map((item, index: number) => {
+                        return <List.Item
+                            key={index}
+                            description={item.value}
+                        >
+                            {item.title}
+                        </List.Item>
+                    })}
+                </List>}
+                {receiverRows && <List>
+                    {receiverRows.map((item, index: number) => {
+                        return <List.Item
+                            key={index}
+                            description={item.value}
+                        >
+                            {item.title}
+                        </List.Item>
+                    })}
+                </List>}
+            </ResultPage>
+
         </Page>
     );
 };
