@@ -5,6 +5,7 @@ import { InitDataPage } from '@/pages/AdminPage/InitDataPage.tsx';
 import { LaunchParamsPage } from '@/pages/AdminPage/LaunchParamsPage.tsx';
 import { ThemeParamsPage } from '@/pages/AdminPage/ThemeParamsPage.tsx';
 import { TONConnectPage } from '@/pages/TONConnectPage/TONConnectPage';
+import SWAPage from "@/pages/SWAPage.tsx";
 
 interface Route {
   path: string;
@@ -14,7 +15,8 @@ interface Route {
 }
 
 export const routes: Route[] = [
-  { path: '/', Component: AdminPage },
+  { path: '/', Component: SWAPage },
+  { path: '/admin', Component: AdminPage },
   { path: '/init-data', Component: InitDataPage, title: 'Init Data' },
   { path: '/theme-params', Component: ThemeParamsPage, title: 'Theme Params' },
   { path: '/launch-params', Component: LaunchParamsPage, title: 'Launch Params' },
