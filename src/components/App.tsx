@@ -10,8 +10,9 @@ export function App() {
     const lp = useLaunchParams();
     const isDark = useSignal(miniApp.isDark);
     const initDataState = useSignal(initData.state);
-    console.log(lp)
-    console.log(isDark)
+
+    console.debug(lp)
+    console.debug(isDark)
 
     if (!initDataState || !initDataState.user) {
         return <ErrorBlock status='disconnected' title={"Connection lost"} description={"we're very sorry"}/>

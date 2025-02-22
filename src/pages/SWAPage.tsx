@@ -1,60 +1,116 @@
-import {Page} from "antd-mobile/es/components/calendar/convert";
-import {FC, useEffect} from "react";
+import {FC, useEffect, useState} from "react";
 import AppHeader from "@/components/AppHeader.tsx";
 import useSwaApi from "@/hooks/useSwaApi.ts";
-import {initData, initDataState, retrieveLaunchParams, useSignal} from "@telegram-apps/sdk-react";
-import {ErrorBlock} from "antd-mobile";
-import {SwaKey} from "@/types/swa.ts";
+import {initData, retrieveLaunchParams, useSignal} from "@telegram-apps/sdk-react";
+import {CapsuleTabs, ErrorBlock, TabBar} from "antd-mobile";
+import {SwaKey, SwaResponse} from "@/types/swa";
+import {useRequest} from "ahooks";
+import UserActivityList from "@/components/swa/SwaActivityView.tsx";
+import SwaActivityView from "@/components/swa/SwaActivityView.tsx";
 
 const SWAPage: FC = () => {
     const {initDataRaw} = retrieveLaunchParams();
+    const initDataState = useSignal(initData.state); // Отслеживаем состояние initData
+    const {fetchUserActivity, toggleUserActivityStatus} = useSwaApi(initDataRaw);
 
-    const initDataState = useSignal(initData.state);
-    const {get, toggleStatus} = useSwaApi(initDataRaw);
+    // Состояние для данных о действиях пользователя
+    const [userActivityData, setUserActivityData] = useState<SwaResponse | null>(null);
 
+    // Состояние для выбранного периода (день, неделя, месяц)
+    const [selectedPeriod, setSelectedPeriod] = useState<"day" | "week" | "month">("day");
+
+    // GET-запрос с использованием useRequest
+    const {
+        error: userActivityError,
+        loading: isUserActivityLoading,
+        run: fetchUserActivityRun,
+    } = useRequest(fetchUserActivity, {
+        manual: true, // Запрос выполняется вручную
+        onSuccess: (data) => setUserActivityData(data), // Обновляем состояние при успешном запросе
+    });
+
+    // POST-запрос с использованием useRequest
+    const {
+        error: toggleStatusError,
+        loading: isToggleStatusLoading,
+        run: toggleUserActivityStatusRun,
+    } = useRequest(toggleUserActivityStatus, {
+        manual: true, // Запрос выполняется вручную
+        onSuccess: () => {
+            // После успешного POST-запроса перезагружаем данные
+            handleRefreshData();
+        },
+    });
+
+    // Обработчик для изменения статуса
     const handleToggleStatus = (key: SwaKey) => {
-        toggleStatus.run(key);
+        toggleUserActivityStatusRun(key);
     };
 
     // Обработчик для обновления данных
     const handleRefreshData = () => {
-        if (initDataRaw && initDataState && initDataState.user) {
-            get.run({
-                tg_id: initDataState.user.id,
-                number_of_days: 7,
-            });
+        if (initDataRaw && initDataState?.user) {
+            let number_of_days: number;
+            switch (selectedPeriod) {
+                case "day":
+                    number_of_days = 1;
+                    break;
+                case "week":
+                    number_of_days = 7;
+                    break;
+                case "month":
+                    number_of_days = 30;
+                    break;
+                default:
+                    number_of_days = 1;
+            }
+            fetchUserActivityRun(initDataState.user.id, number_of_days);
         }
     };
 
+    // Загружаем данные при монтировании компонента и при изменении initDataState или selectedPeriod
     useEffect(() => {
-        handleRefreshData()
-    }, [initDataRaw]);
+        handleRefreshData();
+    }, [initDataRaw, initDataState, selectedPeriod]); // Зависимость от initDataState и selectedPeriod
 
-    if (get.data) {
-        return <div>
-            <button onClick={handleRefreshData} disabled={get.loading}>
-                {get.loading ? 'Loading...' : 'Refresh Data'}
-            </button>
+    const handlePeriodChange = (key: string) => {
+        const period = key as "day" | "week" | "month"; // Приводим key к нужному типу
+        setSelectedPeriod(period);
+    };
 
-            <ul>
-                {Object.entries(get.data).map(([key, value]) => (
-                    <li key={key}>
-                        <strong>{key}:</strong> {value as string}{' '}
-                        <button
-                            onClick={() => handleToggleStatus(key as SwaKey)}
-                            disabled={toggleStatus.loading}
-                        >
-                            {toggleStatus.loading ? 'Updating...' : 'Toggle Status'}
-                        </button>
-                    </li>
-                ))}
-            </ul>
-        </div>
+    // Отображение данных
+    if (userActivityData) {
+        return (
+            <div>
+                {/* TabBar для переключения периода */}
+                <CapsuleTabs activeKey={selectedPeriod} onChange={handlePeriodChange}>
+                    <CapsuleTabs.Tab key="day" title="Сегодня"/>
+                    <CapsuleTabs.Tab key="week" title="Неделя"/>
+                    <CapsuleTabs.Tab key="month" title="Месяц"/>
+                </CapsuleTabs>
+
+                {/* Список действий пользователя */}
+                <SwaActivityView
+                    data={userActivityData}
+                    onToggleStatus={handleToggleStatus}
+                />
+            </div>
+        );
     }
 
-    if (get.error) {
-        return <ErrorBlock title={"Беда!"} status={"empty"} description={"Не удалось получить информацию!"}/>
+    // Отображение ошибки
+    if (userActivityError || toggleStatusError) {
+        return (
+            <ErrorBlock
+                title="Беда!"
+                status="empty"
+                description="Не удалось получить информацию!"
+            />
+        );
     }
-}
+
+    // Отображение загрузки
+    return <div>Loading...</div>;
+};
 
 export default SWAPage;

@@ -24,3 +24,7 @@ export const keyLabels: Record<SwaKey, string> = {
 export type SwaResponse = {
     [key in SwaKey]: number;
 };
+
+export type ToggleStatusResponse = {
+    success: boolean;
+};
