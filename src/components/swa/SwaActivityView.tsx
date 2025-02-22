@@ -6,10 +6,11 @@ import SwaChart from "./SWAChart.tsx";
 
 interface SwaActivityViewProps {
     data: SwaResponse;
+    numberOfDays: number
     onToggleStatus: (key: SwaKey) => void;
 }
 
-const SwaActivityView: FC<SwaActivityViewProps> = ({data, onToggleStatus}) => {
+const SwaActivityView: FC<SwaActivityViewProps> = ({data, onToggleStatus, numberOfDays}) => {
     // Состояние для отслеживания загрузки каждого ключа
     const [loadingKeys, setLoadingKeys] = useState<Record<SwaKey, boolean>>(
         Object.keys(data).reduce((acc, key) => {
@@ -27,7 +28,7 @@ const SwaActivityView: FC<SwaActivityViewProps> = ({data, onToggleStatus}) => {
 
     return (
         <div>
-            <SwaChart data={data}/>
+            <SwaChart data={data} numberOfDays={numberOfDays} small={numberOfDays==1}/>
             <List>
                 {Object.entries(data).map(([key, value]) => (
                     <List.Item

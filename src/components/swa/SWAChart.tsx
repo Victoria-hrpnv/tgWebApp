@@ -1,6 +1,6 @@
 // components/DiagramOfRadii.tsx
 import React from "react";
-import { Radar } from "react-chartjs-2";
+import {Radar} from "react-chartjs-2";
 import {
     Chart as ChartJS,
     RadialLinearScale,
@@ -10,26 +10,42 @@ import {
     Tooltip,
     Legend,
 } from "chart.js";
-import { SwaKey, SwaResponse } from "@/types/swa";
-import { keyLabels } from "@/types/swa";
+import {SwaKey, SwaResponse} from "@/types/swa";
+import {keyLabels} from "@/types/swa";
+import {themeParams, useSignal} from "@telegram-apps/sdk-react";
 
 // Регистрируем необходимые компоненты Chart.js
 ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Tooltip, Legend);
 
-interface DiagramOfRadiiProps {
+interface SwaChartProps {
     data: SwaResponse;
+    numberOfDays: number; // Пропс для количества дней
+    small?: boolean;
 }
 
-const SwaChart: React.FC<DiagramOfRadiiProps> = ({ data }) => {
+const SwaChart: React.FC<SwaChartProps> = ({data, numberOfDays, small = false}) => {
+    // Получаем цвета из текущей темы Telegram Mini Apps
+    const tp = useSignal(themeParams.state);
+
+    // Цвета из Telegram Mini Apps
+    const tgColors = {
+        sectionBgColor: tp.buttonColor || "rgba(255, 255, 255, 0.6)", // Фон
+        border: tp.buttonColor || "#2481cc", // Акцентный цвет
+        text: tp.textColor || "#000000", // Текст
+        grid: tp.hintColor || "rgba(0, 0, 0, 0.1)", // Сетка
+    };
+
+    const labels = Object.keys(data).map((key) => keyLabels[key as SwaKey])
+
     // Преобразуем данные
     const chartData = {
-        labels: Object.keys(data).map((key) => keyLabels[key as SwaKey]), // Используем переводы из keyLabels
+        labels: labels, // Используем переводы из keyLabels
         datasets: [
             {
                 label: "Activity",
                 data: Object.values(data), // Значения для каждого действия
-                backgroundColor: "rgba(136, 132, 216, 0.6)", // Цвет заливки
-                borderColor: "rgba(136, 132, 216, 1)", // Цвет границы
+                backgroundColor: tgColors.sectionBgColor, // Цвет заливки из Telegram Mini Apps
+                borderColor: tgColors.border, // Цвет границы из Telegram Mini Apps
                 borderWidth: 1,
             },
         ],
@@ -40,9 +56,21 @@ const SwaChart: React.FC<DiagramOfRadiiProps> = ({ data }) => {
         scales: {
             r: {
                 beginAtZero: true, // Начинаем шкалу с нуля
+                max: numberOfDays, // Максимальное значение для 1 дня
+                grid: {
+                    color: tgColors.grid, // Цвет сетки из Telegram Mini Apps
+                },
                 ticks: {
+                    maxTicksLimit: 3,
+                    display: false, // Скрываем промежуточные значения на оси Y
                     stepSize: 1, // Шаг шкалы
                 },
+                pointLabels: {
+                    display: !small, // Скрываем лейблы, если small=true
+                    font: {
+                        size: small ? 0 : 12, // Размер шрифта лейблов (0, если small=true)
+                    },
+                }
             },
         },
         plugins: {
@@ -52,7 +80,9 @@ const SwaChart: React.FC<DiagramOfRadiiProps> = ({ data }) => {
         },
     };
 
-    return <Radar data={chartData} options={options} />;
+    return <div style={{width: small ? "100px" : "100%", height: small ? "100px" : "auto"}}>
+        <Radar data={chartData} options={options}/>;
+    </div>
 };
 
 export default SwaChart;

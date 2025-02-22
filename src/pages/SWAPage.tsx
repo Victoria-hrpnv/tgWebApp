@@ -12,6 +12,7 @@ const SWAPage: FC = () => {
     const {initDataRaw} = retrieveLaunchParams();
     const initDataState = useSignal(initData.state); // Отслеживаем состояние initData
     const {fetchUserActivity, toggleUserActivityStatus} = useSwaApi(initDataRaw);
+    const [numberOfDays, setNumberOfDays] = useState(1)
 
     // Состояние для данных о действиях пользователя
     const [userActivityData, setUserActivityData] = useState<SwaResponse | null>(null);
@@ -64,6 +65,7 @@ const SWAPage: FC = () => {
                 default:
                     number_of_days = 1;
             }
+            setNumberOfDays(number_of_days)
             fetchUserActivityRun(initDataState.user.id, number_of_days);
         }
     };
@@ -92,6 +94,7 @@ const SWAPage: FC = () => {
                 {/* Список действий пользователя */}
                 <SwaActivityView
                     data={userActivityData}
+                    numberOfDays={numberOfDays}
                     onToggleStatus={handleToggleStatus}
                 />
             </div>
