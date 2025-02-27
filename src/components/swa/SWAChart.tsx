@@ -20,13 +20,11 @@ ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Tooltip, 
 
 interface SwaChartProps {
     small?: boolean;
-    days: boolean
+    numberOfDays: number
+    activityData: SwaResponse
 }
 
-const SwaChart: React.FC<SwaChartProps> = ({  small = false, days}) => {
-    const {userActivityData } = useSwaStatus();
-    const {numberOfDays} = useSwaStatus()
-    const {userDataForOneDay } = useSwaStatus();
+const SwaChart: React.FC<SwaChartProps> = ({activityData, small = false, numberOfDays}) => {
     // Получаем цвета из текущей темы Telegram Mini Apps
     const tp = useSignal(themeParams.state);
 
@@ -38,7 +36,7 @@ const SwaChart: React.FC<SwaChartProps> = ({  small = false, days}) => {
         grid: tp.hintColor || "rgba(0, 0, 0, 0.1)", // Сетка
     };
 
-    const labels =  Object.keys(userActivityData as SwaResponse).map((key) => keyLabels[key as SwaKey])
+    const labels = Object.keys(activityData as SwaResponse).map((key) => keyLabels[key as SwaKey])
 
 
     // Преобразуем данные
@@ -47,7 +45,7 @@ const SwaChart: React.FC<SwaChartProps> = ({  small = false, days}) => {
         datasets: [
             {
                 label: "Activity",
-                data:  Object.values(days ? userDataForOneDay as SwaResponse : userActivityData as SwaResponse) , // Значения для каждого действия
+                data: Object.values(numberOfDays ? activityData as SwaResponse : activityData as SwaResponse), // Значения для каждого действия
                 backgroundColor: tgColors.sectionBgColor, // Цвет заливки из Telegram Mini Apps
                 borderColor: tgColors.border, // Цвет границы из Telegram Mini Apps
                 borderWidth: 1,
@@ -60,7 +58,7 @@ const SwaChart: React.FC<SwaChartProps> = ({  small = false, days}) => {
         scales: {
             r: {
                 beginAtZero: true, // Начинаем шкалу с нуля
-                max: days? 1 : numberOfDays, // Максимальное значение для 1 дня
+                max: numberOfDays+1, // Максимальное значение для 1 дня
                 grid: {
                     color: tgColors.grid, // Цвет сетки из Telegram Mini Apps
                 },
@@ -84,7 +82,7 @@ const SwaChart: React.FC<SwaChartProps> = ({  small = false, days}) => {
         },
     };
 
-    return <div style={{width: days ? '65px' : '370px' , height: days ? '65px' : 'auto' }}
+    return <div style={{width: small ? '65px' : '370px', height: small ? '65px' : 'auto'}}
     >
         <Radar data={chartData} options={options}/>;
     </div>

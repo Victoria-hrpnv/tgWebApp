@@ -1,12 +1,10 @@
 // hooks/useSwaApi.ts
 import {SwaKey, SwaResponse, ToggleStatusResponse} from '../types/swa';
-import { getMockData, mockToggleStatus} from '../utils/mockSwaData.ts';
+import {getMockData, mockToggleStatus} from '../utils/mockSwaData.ts';
 
-// Константы
-// const SERVER_URL = import.meta.env.VITE_API_URL;
-const SERVER_URL:string = 'http://192.168.0.16:8080'
-// const DEV_MODE = import.meta.env.MODE === 'development';
-const DEV_MODE = false;
+const SERVER_URL = import.meta.env.VITE_API_URL;
+const DEV_MODE = import.meta.env.MODE === 'development';
+
 const useSwaApi = (initDataRaw?: string) => {
     const getAuthHeader = () => {
         if (!initDataRaw) {
@@ -20,7 +18,7 @@ const useSwaApi = (initDataRaw?: string) => {
         // Если в режиме разработки, возвращаем мок-данные
         if (DEV_MODE) {
             return new Promise(resolve =>
-                setTimeout(() => resolve(getMockData(number_of_days) as SwaResponse), 100) // задержка 100мс
+                setTimeout(() => resolve(getMockData(number_of_days) as SwaResponse), 1000) // задержка 100мс
             );
         }
 
@@ -39,7 +37,7 @@ const useSwaApi = (initDataRaw?: string) => {
         // Если в режиме разработки, используем мок-функцию
         if (DEV_MODE) {
             return new Promise(resolve =>
-                setTimeout(() => resolve(mockToggleStatus(key, 0)), 100) // задержка 100мс
+                setTimeout(() => resolve(mockToggleStatus(key, 0)), 1000) // задержка 100мс
             );
         }
 

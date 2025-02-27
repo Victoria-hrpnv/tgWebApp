@@ -5,15 +5,14 @@ import {useSwaStatus} from "@/hooks/useSwaStatus.ts";
 
 const AppHeader = () => {
     const initDataState = useSignal(initData.state);
-    const {numberOfDays} = useSwaStatus()
-    const { userActivityData } = useSwaStatus();
+    const {userActivityToday} = useSwaStatus();
 
-    if (initDataState && initDataState.user && userActivityData) {
+    if (initDataState && initDataState.user && userActivityToday) {
         return <List>
             <List.Item
                 prefix={<Avatar src={initDataState.user.photoUrl as string}/>}
                 description={initDataState.user.lastName}
-                extra={<SwaChart small={true} days = {true}/>}
+                extra={<SwaChart small={true} numberOfDays={0} activityData={userActivityToday}/>}
             >
                 {initDataState.user.firstName}
             </List.Item></List>
