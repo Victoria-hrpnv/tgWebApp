@@ -43,9 +43,6 @@ const SWAPage: FC = () => {
             handleRefreshData();
 
         },
-        onError: (error) => {
-            console.error('Ошибка при выполнении toggleUserActivityStatus:', toggleStatusError);
-        },
     });
 
     // Обработчик для изменения статуса
@@ -53,7 +50,6 @@ const SWAPage: FC = () => {
         if (initDataRaw && initDataState?.user){
             console.log('gege:',key)
             toggleUserActivityStatusRun(initDataState.user.id, key );
-
         }
 
     };
