@@ -1,10 +1,10 @@
 import {useLaunchParams, miniApp, useSignal, initData} from '@telegram-apps/sdk-react';
 import {Navigate, Route, Routes, HashRouter} from 'react-router-dom';
-
 import {routes} from '@/navigation/routes.tsx';
 import ruRU from "antd-mobile/es/locales/ru-RU";
 import {ConfigProvider, ErrorBlock} from "antd-mobile";
 import AppHeader from "@/components/AppHeader.tsx";
+import { SwaStatusProvider } from '@/context/SwaStatusContext';
 
 export function App() {
     const lp = useLaunchParams();
@@ -20,6 +20,7 @@ export function App() {
 
     return (
         <ConfigProvider locale={ruRU}>
+            <SwaStatusProvider>
             <AppHeader/>
             <HashRouter>
                 <Routes>
@@ -27,6 +28,7 @@ export function App() {
                     <Route path="*" element={<Navigate to="/"/>}/>
                 </Routes>
             </HashRouter>
+            </SwaStatusProvider>
         </ConfigProvider>
 
     );

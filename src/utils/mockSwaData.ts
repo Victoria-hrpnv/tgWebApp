@@ -10,7 +10,7 @@ type SwaResponse = {
 type MockDataStore = Record<number, SwaResponse>;
 
 // Инициализация данных для каждого количества дней
-let SWA_DATA: MockDataStore = {};
+const SWA_DATA: MockDataStore = {};
 
 // Функция для генерации случайных данных
 export const generateMockData = (number_of_days: number): SwaResponse => {
@@ -27,7 +27,7 @@ export const generateMockData = (number_of_days: number): SwaResponse => {
 
     // Перебираем все ключи SwaKey
     Object.values(SwaKey).forEach((key) => {
-        mockData[key] = Math.floor(Math.random() * (number_of_days + 1)); // Случайное число от 0 до number_of_days
+        mockData[key] = Math.floor(Math.random() * (!number_of_days? 2 : number_of_days + 1)); // Случайное число от 0 до number_of_days
     });
 
     // Обновляем данные для выбранного количества дней
@@ -36,17 +36,24 @@ export const generateMockData = (number_of_days: number): SwaResponse => {
 };
 
 // Функция для мокового изменения статуса
-export const mockToggleStatus = (
-    key: SwaKey,
-    number_of_days: number
-): ToggleStatusResponse => {
-    // Увеличиваем значение на 1 для выбранного ключа и количества дней
-    SWA_DATA[number_of_days] = {
-        ...SWA_DATA[number_of_days],
-        [key]: (SWA_DATA[number_of_days][key] || 0) + 1,
+    export const mockToggleStatus = (
+        key: SwaKey,
+        number_of_days: number
+    ): ToggleStatusResponse => {
+
+        if (number_of_days == 0) {
+            SWA_DATA[number_of_days] = {
+                ...SWA_DATA[number_of_days],
+                [key]: (SWA_DATA[number_of_days][key]) ? 0 : 1,
+            };
+        } else { SWA_DATA[number_of_days] = {
+            ...SWA_DATA[number_of_days],
+            [key]: (SWA_DATA[number_of_days][key] || 0) + 1,};
+        }
+        // Увеличиваем значение на 1 для выбранного ключа и количества дней
+        return { success: true };
     };
-    return { success: true };
-};
+
 
 // Функция для получения данных по количеству дней
 export const getMockData = (number_of_days: number): SwaResponse => {

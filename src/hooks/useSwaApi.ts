@@ -1,11 +1,12 @@
 // hooks/useSwaApi.ts
 import {SwaKey, SwaResponse, ToggleStatusResponse} from '../types/swa';
-import {generateMockData, getMockData, mockToggleStatus, SWA_DATA} from '../utils/mockSwaData.ts';
+import { getMockData, mockToggleStatus} from '../utils/mockSwaData.ts';
 
 // Константы
-const SERVER_URL = import.meta.env.VITE_API_URL;
-const DEV_MODE = import.meta.env.MODE === 'development';
-
+// const SERVER_URL = import.meta.env.VITE_API_URL;
+const SERVER_URL:string = 'http://192.168.0.16:8080'
+// const DEV_MODE = import.meta.env.MODE === 'development';
+const DEV_MODE = false;
 const useSwaApi = (initDataRaw?: string) => {
     const getAuthHeader = () => {
         if (!initDataRaw) {
@@ -28,19 +29,20 @@ const useSwaApi = (initDataRaw?: string) => {
         const response = await fetch(url, {
             headers: getAuthHeader(),
         });
-
         if (!response.ok) throw new Error(`GET Error: ${response.status}`);
         return response.json();
     };
 
     // POST-запрос: Изменение статуса
-    const toggleUserActivityStatus = async (key: SwaKey): Promise<ToggleStatusResponse> => {
+    const toggleUserActivityStatus = async (tg_id: number, key: SwaKey): Promise<ToggleStatusResponse> => {
+        console.log(JSON.stringify({key, userId: tg_id}))
         // Если в режиме разработки, используем мок-функцию
         if (DEV_MODE) {
             return new Promise(resolve =>
-                setTimeout(() => resolve(mockToggleStatus(key, 1)), 100) // задержка 100мс
+                setTimeout(() => resolve(mockToggleStatus(key, 0)), 100) // задержка 100мс
             );
         }
+
 
         // Иначе делаем реальный запрос
         const url = `${SERVER_URL}/toggle-status`;
@@ -50,7 +52,8 @@ const useSwaApi = (initDataRaw?: string) => {
                 ...getAuthHeader(),
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({key}),
+            body: JSON.stringify({key, userId: tg_id}),
+
         });
 
         if (!response.ok) throw new Error(`POST Error: ${response.status}`);
