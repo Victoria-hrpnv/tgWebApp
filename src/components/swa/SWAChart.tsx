@@ -75,6 +75,11 @@ const SwaChart: React.FC<SwaChartProps> = ({activityData, small = false, numberO
                 }
             },
         },
+        elements: {
+            point: {
+                radius: small ? 0 : 3, // Устанавливаем радиус точек в 0
+            }
+        },
         plugins: {
             legend: {
                 display: false, // Скрываем легенду
