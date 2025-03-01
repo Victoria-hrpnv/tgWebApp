@@ -5,11 +5,12 @@ import {useRequest} from "ahooks";
 
 interface SwaStatusContextType {
     userActivityToday: SwaResponse | null;
+    user: User | null;
     refresh: () => void;
 }
 
 import useSwaApi from "@/hooks/useSwaApi.ts";
-import {initData, initDataState, LaunchParams, retrieveLaunchParams, useSignal} from "@telegram-apps/sdk-react";
+import {initData, initDataState, LaunchParams, retrieveLaunchParams, User, useSignal} from "@telegram-apps/sdk-react";
 import {ErrorBlock, Mask, SpinLoading} from "antd-mobile";
 
 
@@ -18,6 +19,7 @@ export const SwaStatusContext = createContext<SwaStatusContextType | undefined>(
 export const SwaStatusProvider: React.FC<{ children: ReactNode }> = ({children}) => {
     const {initDataRaw} = retrieveLaunchParams();
     const initDataState = useSignal(initData.state); // Отслеживаем состояние initData
+    const [user, setUser] = useState<User | null>(null);
     const {fetchUserActivity, toggleUserActivityStatus} = useSwaApi(initDataRaw);
     const [userActivityToday, setUserActivityToday] = useState<SwaResponse | null>(null);
 
@@ -33,8 +35,9 @@ export const SwaStatusProvider: React.FC<{ children: ReactNode }> = ({children})
     });
 
     useEffect(() => {
-        console.log(initDataState)
         if (initDataState?.user?.id) {
+            console.dir(initDataState.user);
+            setUser(initDataState.user);
             refresh()
         }
     }, [initDataState]);
@@ -51,7 +54,7 @@ export const SwaStatusProvider: React.FC<{ children: ReactNode }> = ({children})
     }
 
     return (
-        <SwaStatusContext.Provider value={{userActivityToday, refresh}}>
+        <SwaStatusContext.Provider value={{user, userActivityToday, refresh}}>
             {children}
         </SwaStatusContext.Provider>
     );

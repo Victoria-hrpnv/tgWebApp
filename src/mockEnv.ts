@@ -31,7 +31,7 @@ if (import.meta.env.DEV) {
           language_code: 'ru',
           is_premium: true,
           allows_write_to_pm: true,
-          photoUrl: "https://avatar.iran.liara.run/public/12"
+          photo_url: "https://gw.alipayobjects.com/zos/bmw-prod/b874caa9-4458-412a-9ac6-a61486180a62.svg"
         })],
         ['hash', '89d6079ad6762351f38c6dbbc41bb53048019256a9443988af7a48bcad16ba31'],
         ['auth_date', '1716922846'],

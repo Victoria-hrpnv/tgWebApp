@@ -8,7 +8,7 @@ import {retrieveLaunchParams} from "@telegram-apps/sdk-react";
 
 const CurrentActivities: FunctionComponent = () => {
     const {initDataRaw} = retrieveLaunchParams();
-    const {userActivityToday, refresh} = useSwaStatus()
+    const {user, userActivityToday, refresh} = useSwaStatus()
     const {toggleUserActivityStatus} = useSwaApi(initDataRaw);
 
     const {
@@ -25,7 +25,9 @@ const CurrentActivities: FunctionComponent = () => {
 
     const handleToggleStatus = (key: SwaKey) => {
         console.log('gege:', key)
-        //toggleUserActivityStatusRun(initDataState.user.id, key);
+        if (user?.id) {
+            toggleUserActivityStatusRun(user?.id, key);
+        }
     };
 
     return <List>
