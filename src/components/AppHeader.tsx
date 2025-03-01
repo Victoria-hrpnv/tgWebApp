@@ -1,4 +1,4 @@
-import {Avatar, List} from "antd-mobile";
+import {Avatar, List, Skeleton} from "antd-mobile";
 import {initData, useSignal} from "@telegram-apps/sdk-react";
 import SwaChart from "@/components/swa/SWAChart.tsx";
 import {useSwaStatus} from "@/hooks/useSwaStatus.ts";
@@ -18,12 +18,10 @@ const AppHeader = () => {
             </List.Item></List>
     } else {
         return <List>
-            <List.Item
-                prefix={<Avatar src={'https://avatar.iran.liara.run/public/12'}/>}
-                description='Deserunt dolor ea eaque eos'
-            >
-                Novalee Spicer
-            </List.Item></List>
+            <List.Item>
+                <Skeleton.Title animated/>
+            </List.Item>
+        </List>
     }
 
 

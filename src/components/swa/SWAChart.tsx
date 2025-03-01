@@ -68,16 +68,13 @@ const SwaChart: React.FC<SwaChartProps> = ({activityData, small = false, numberO
                     stepSize: 1, // Шаг шкалы
                 },
                 pointLabels: {
-                    display: !small, // Скрываем лейблы, если small=true
-                    font: {
-                        size: small ? 0 : 12, // Размер шрифта лейблов (0, если small=true)
-                    },
+                    display: !small
                 }
             },
         },
         elements: {
             point: {
-                radius: small ? 0 : 3, // Устанавливаем радиус точек в 0
+                radius: 0, // Устанавливаем радиус точек в 0
             }
         },
         plugins: {

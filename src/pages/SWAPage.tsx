@@ -21,8 +21,12 @@ const SWAPage: FC = () => {
                 <CapsuleTabs.Tab key="day" title="Сегодня">
                     <CurrentActivities/>
                 </CapsuleTabs.Tab>
-                <CapsuleTabs.Tab key="week" title="Неделя"/>
-                <CapsuleTabs.Tab key="month" title="Месяц"/>
+                <CapsuleTabs.Tab key="week" title="Неделя">
+                    <SwaActivityView numberOfDays={7}/>
+                </CapsuleTabs.Tab>
+                <CapsuleTabs.Tab key="month" title="Месяц">
+                    <SwaActivityView numberOfDays={30}/>
+                </CapsuleTabs.Tab>
             </CapsuleTabs>
 
             {/*<SwaActivityView

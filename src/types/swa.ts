@@ -21,6 +21,17 @@ export const keyLabels: Record<SwaKey, string> = {
     [SwaKey.SWA_KEY_8]: 'Урок благодарности',
 };
 
+export const keyDescriptions: Record<SwaKey, string> = {
+    [SwaKey.SWA_KEY_1]: 'Осознанный старт',
+    [SwaKey.SWA_KEY_2]: 'Стратегический фокус',
+    [SwaKey.SWA_KEY_3]: 'Природная энергия',
+    [SwaKey.SWA_KEY_4]: 'В здоровом теле',
+    [SwaKey.SWA_KEY_5]: 'Финансовый рост',
+    [SwaKey.SWA_KEY_6]: 'Личная реализация',
+    [SwaKey.SWA_KEY_7]: 'Внутренняя гармония',
+    [SwaKey.SWA_KEY_8]: 'Духовный баланс',
+};
+
 export type SwaResponse = {
     [key in SwaKey]: number;
 };

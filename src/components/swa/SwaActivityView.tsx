@@ -1,48 +1,54 @@
 // SwaActivityView.tsx
-import {FC, useState} from "react";
-import {Divider, List, SwipeAction} from "antd-mobile";
+import {FC, useEffect, useState} from "react";
+import {Divider, List, Skeleton} from "antd-mobile";
 import {keyLabels, SwaKey, SwaResponse} from "@/types/swa.ts";
 import SwaChart from "./SWAChart.tsx";
 import {useSwaStatus} from "@/hooks/useSwaStatus.ts";
+import {useRequest} from "ahooks";
+import useSwaApi from "@/hooks/useSwaApi.ts";
+import {retrieveLaunchParams} from "@telegram-apps/sdk-react";
 
 interface SwaActivityViewProps {
-    onToggleStatus: (key: SwaKey) => void;
+    numberOfDays: number
 }
 
-const SwaActivityView: FC<SwaActivityViewProps> = ({onToggleStatus}) => {
-    const [numberOfDays, setNumberOfDays] = useState(0)
-    // Состояние для отслеживания загрузки каждого ключа
+const SwaActivityView: FC<SwaActivityViewProps> = ({numberOfDays}) => {
+    const {initDataRaw} = retrieveLaunchParams();
+    const {fetchUserActivity} = useSwaApi(initDataRaw);
+    const {user} = useSwaStatus();
+    const [data, setData] = useState<SwaResponse | null>(null);
 
-    const [loadingKeys, setLoadingKeys] = useState<Record<SwaKey, boolean>>(
-        Object.keys(userActivityData as SwaResponse).reduce((acc, key) => {
-            acc[key as SwaKey] = false;
-            return acc;
-        }, {} as Record<SwaKey, boolean>)
-    );
+    const {
+        error,
+        loading,
+        run: refreshData,
+    } = useRequest(fetchUserActivity, {
+        manual: true,
+        onSuccess: (data: SwaResponse) => {
+            console.table(data)
+            setData(data)
+        }
+    });
 
-    // Обработчик для изменения статуса
-    const handleToggleStatus = async (key: SwaKey) => {
-        setLoadingKeys((prev) => ({...prev, [key]: true})); // Включаем загрузку для конкретного ключа
-        onToggleStatus(key); // Выполняем запрос
-        setLoadingKeys((prev) => ({...prev, [key]: false})); // Выключаем загрузку
-    };
+    useEffect(() => {
+        refresh()
+    }, []);
 
+    const refresh = () => {
+        if (user?.id) {
+            console.log("refreshing the data for " + numberOfDays)
+            refreshData(user?.id, numberOfDays)
+        }
+    }
+
+    if (loading || !data) {
+        return <Skeleton.Paragraph lineCount={5} animated/>
+    }
 
     return (
-        <>
-            {numberOfDays !== 0 ?
-                <SwaChart small={numberOfDays == 0} days={false}/> : (
-                    <>
-                        <Divider
-                            style={{
-                                border: 'none',
-                            }}>{'Смахните, чтобы изменить статус радиуса'}</Divider>
-                        </>
-                )
-
-            }
-
-        </>
+        <div>
+            <SwaChart small={false} numberOfDays={numberOfDays} activityData={data as SwaResponse}/>
+        </div>
     );
 };
 
