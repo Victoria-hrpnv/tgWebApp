@@ -4,7 +4,8 @@ import {routes} from '@/navigation/routes.tsx';
 import ruRU from "antd-mobile/es/locales/ru-RU";
 import {ConfigProvider, ErrorBlock} from "antd-mobile";
 import AppHeader from "@/components/AppHeader.tsx";
-import { SwaStatusProvider } from '@/context/SwaStatusContext';
+import {SwaStatusProvider} from '@/context/SwaStatusContext';
+import {KiberniktoProvider} from "@/context/KiberniktoContext.tsx";
 
 export function App() {
     const lp = useLaunchParams();
@@ -21,13 +22,15 @@ export function App() {
     return (
         <ConfigProvider locale={ruRU}>
             <SwaStatusProvider>
-            <AppHeader/>
-            <HashRouter>
-                <Routes>
-                    {routes.map((route) => <Route key={route.path} {...route} />)}
-                    <Route path="*" element={<Navigate to="/"/>}/>
-                </Routes>
-            </HashRouter>
+                <KiberniktoProvider>
+                    <AppHeader/>
+                    <HashRouter>
+                        <Routes>
+                            {routes.map((route) => <Route key={route.path} {...route} />)}
+                            <Route path="*" element={<Navigate to="/"/>}/>
+                        </Routes>
+                    </HashRouter>
+                </KiberniktoProvider>
             </SwaStatusProvider>
         </ConfigProvider>
 
