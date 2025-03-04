@@ -2,8 +2,10 @@
 import {SwaKey, SwaResponse, ToggleStatusResponse} from '../types/swa';
 import {getMockData, mockToggleStatus} from '../utils/mockSwaData.ts';
 
+
 const SERVER_URL = import.meta.env.VITE_API_URL;
 const DEV_MODE = import.meta.env.MODE === 'development';
+
 
 const useSwaApi = (initDataRaw?: string) => {
     const getAuthHeader = () => {
@@ -21,7 +23,6 @@ const useSwaApi = (initDataRaw?: string) => {
                 setTimeout(() => resolve(getMockData(number_of_days) as SwaResponse), 1000) // задержка 100мс
             );
         }
-
         // Иначе делаем реальный запрос
         const url = `${SERVER_URL}/${tg_id}/${number_of_days}`;
         const response = await fetch(url, {
@@ -33,7 +34,6 @@ const useSwaApi = (initDataRaw?: string) => {
 
     // POST-запрос: Изменение статуса
     const toggleUserActivityStatus = async (tg_id: number, key: SwaKey): Promise<ToggleStatusResponse> => {
-        console.log(JSON.stringify({key, userId: tg_id}))
         // Если в режиме разработки, используем мок-функцию
         if (DEV_MODE) {
             return new Promise(resolve =>

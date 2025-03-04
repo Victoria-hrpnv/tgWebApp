@@ -45,7 +45,8 @@ const SwaChart: React.FC<SwaChartProps> = ({activityData, small = false, numberO
         datasets: [
             {
                 label: "Activity",
-                data: Object.values(numberOfDays ? activityData as SwaResponse : activityData as SwaResponse), // Значения для каждого действия
+                // data: Object.values(numberOfDays ? activityData as SwaResponse : activityData as SwaResponse),
+                data: Object.values( activityData as SwaResponse ),// Значения для каждого действия
                 backgroundColor: tgColors.sectionBgColor, // Цвет заливки из Telegram Mini Apps
                 borderColor: tgColors.border, // Цвет границы из Telegram Mini Apps
                 borderWidth: 1,
@@ -57,6 +58,10 @@ const SwaChart: React.FC<SwaChartProps> = ({activityData, small = false, numberO
     const options = {
         scales: {
             r: {
+                angleLines: {
+                    color: '#999999', // Цвет радиальных линий (разделение секторов)
+                    lineWidth: 0.3, // Толщина радиальных линий
+                },
                 beginAtZero: true, // Начинаем шкалу с нуля
                 max: numberOfDays+1, // Максимальное значение для 1 дня
                 grid: {
@@ -84,9 +89,9 @@ const SwaChart: React.FC<SwaChartProps> = ({activityData, small = false, numberO
         },
     };
 
-    return <div style={{width: small ? '65px' : '370px', height: small ? '65px' : 'auto'}}
+    return <div style={{width: small ? '65px' : '90vw', height: small ? '65px' : 'auto'}}
     >
-        <Radar data={chartData} options={options}/>;
+        <Radar data={chartData} options={options}/>
     </div>
 };
 

@@ -6,12 +6,11 @@ import {useRequest} from "ahooks";
 import useSwaApi from "@/hooks/useSwaApi.ts";
 import {retrieveLaunchParams, themeParams, useSignal} from "@telegram-apps/sdk-react";
 import {
-    CheckOutline, CheckShieldFill,
+    CheckOutline,
     CheckShieldOutline,
     CloseOutline,
     CollectMoneyOutline,
-    RightOutline,
-    UnorderedListOutline
+
 } from "antd-mobile-icons";
 
 const CurrentActivities: FunctionComponent = () => {
@@ -33,13 +32,12 @@ const CurrentActivities: FunctionComponent = () => {
     });
 
     const handleToggleStatus = (key: SwaKey) => {
-        console.log('gege:', key)
         if (user?.id) {
             toggleUserActivityStatusRun(user?.id, key);
         }
     };
 
-    if (loading) {
+    if (isToggleStatusLoading || toggleStatusError) {
         return <Skeleton.Paragraph lineCount={8}/>
     }
 
@@ -47,17 +45,18 @@ const CurrentActivities: FunctionComponent = () => {
         <Divider
             style={{
                 border: 'none',
+                margin: '8px 0 16px',
             }}>{'Свайп для настройки радиусов'}</Divider>
         <List>
             {userActivityToday &&
                 Object.entries(userActivityToday).map(([key, value]) => {
-                    const closed = !!value
+                    const closed = value
                     const leftActions = closed ? [] : [{
                         key: key,
                         text: <CheckOutline/>,
                         color: 'success',
                         onClick: async () => {
-                            //await handleToggleStatus(key as SwaKey)
+                           handleToggleStatus(key as SwaKey)
                         }
                     }]
 
@@ -66,17 +65,16 @@ const CurrentActivities: FunctionComponent = () => {
                         text: <CloseOutline/>,
                         color: 'danger',
                         onClick: async () => {
-                            //await handleToggleStatus(key as SwaKey)
+                            handleToggleStatus(key as SwaKey)
                         }
                     }]
                     const iconColor = value ? tp.accentTextColor : tp.destructiveTextColor
                     const icon = value ? <CheckShieldOutline color={iconColor}/> : <CollectMoneyOutline color={iconColor}/>
                     return <SwipeAction
-
                         key={key}
                         leftActions={leftActions}
                         rightActions={rightActions}>
-                        <List.Item
+                        <List.Item style={{borderTop: ' #ff3141'}}
                             prefix={icon}
                             description={keyDescriptions[key as SwaKey]}>
                             {keyLabels[key as SwaKey]}

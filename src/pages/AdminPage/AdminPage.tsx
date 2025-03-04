@@ -1,5 +1,4 @@
 import type {FC} from 'react';
-
 import {Link} from '@/components/Link/Link.tsx';
 import {Page} from '@/components/Page.tsx';
 
