@@ -21,8 +21,8 @@ RUN apk add --no-cache nginx
 # Copy nginx configuration
 COPY nginx.conf /etc/nginx/nginx.conf
 
-# Copy React build artifacts to Nginx directory
-RUN mkdir -p /var/lib/nginx/html && cp -r build/* /var/lib/nginx/html/
+# Copy vite build artifacts to Nginx directory
+RUN mkdir -p /var/lib/nginx/html && cp -r dist/* /var/lib/nginx/html/
 
 # Expose the port
 EXPOSE 8080
