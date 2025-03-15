@@ -56,7 +56,7 @@ const CurrentActivities: FunctionComponent = () => {
                         text: <CheckOutline/>,
                         color: 'success',
                         onClick: async () => {
-                           handleToggleStatus(key as SwaKey)
+                            handleToggleStatus(key as SwaKey)
                         }
                     }]
 
@@ -68,15 +68,16 @@ const CurrentActivities: FunctionComponent = () => {
                             handleToggleStatus(key as SwaKey)
                         }
                     }]
-                    const iconColor = value ? tp.accentTextColor : tp.destructiveTextColor
-                    const icon = value ? <CheckShieldOutline color={iconColor}/> : <CollectMoneyOutline color={iconColor}/>
+                    const iconColor = value ? '#10b981' : tp.destructiveTextColor
+                    const icon = value ? <CheckShieldOutline color={iconColor}/> :
+                        <CollectMoneyOutline color={iconColor}/>
                     return <SwipeAction
                         key={key}
                         leftActions={leftActions}
                         rightActions={rightActions}>
                         <List.Item style={{borderTop: ' #ff3141'}}
-                            prefix={icon}
-                            description={keyDescriptions[key as SwaKey]}>
+                                   prefix={icon}
+                                   description={keyDescriptions[key as SwaKey]}>
                             {keyLabels[key as SwaKey]}
                         </List.Item>
                     </SwipeAction>
