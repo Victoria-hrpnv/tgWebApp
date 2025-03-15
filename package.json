@@ -6,7 +6,7 @@
   "scripts": {
     "deploy": "no deployment yet",
     "dev": "vite --mode dev",
-    "dev:https": "cross-env HTTPS=true vite",
+    "dev:https": "cross-env HTTPS=true vite --mode dev",
     "build": "tsc --noEmit && vite build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "lint:fix": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0 --fix",

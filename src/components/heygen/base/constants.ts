@@ -1,6 +1,6 @@
-export const KNOWLEDGE_ID = import.meta.env.VITE_REACT_APP_KNOWLEDGE_ID || "6b3e3f4d0a50428e8bd75d447b6378d7";
-export const AVATAR_ID = import.meta.env.VITE_REACT_APP_AVATAR_ID || "Judy_Lawyer_Sitting2_public";
-export const LANGUAGE_ID = import.meta.env.VITE_REACT_APP_LANGUAGE_ID || "ru";
+export const KNOWLEDGE_ID = import.meta.env.VITE_KNOWLEDGE_ID || "6b3e3f4d0a50428e8bd75d447b6378d7";
+export const AVATAR_ID = import.meta.env.VITE_AVATAR_ID || "Judy_Lawyer_Sitting2_public";
+export const LANGUAGE_ID = import.meta.env.VITE_LANGUAGE_ID || "ru";
 
 export const AVATARS = [
     {

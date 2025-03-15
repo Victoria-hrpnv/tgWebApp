@@ -17,6 +17,7 @@ const useSwaApi = (initDataRaw?: string) => {
     };
 
     // GET-запрос: Получение данных о действиях пользователя
+    // @ts-ignore
     const fetchUserActivity = async (tg_id: number, number_of_days: number): Promise<SwaResponse> => {
         // Если в режиме разработки, возвращаем мок-данные
         if (DEV_MODE) {
@@ -25,7 +26,7 @@ const useSwaApi = (initDataRaw?: string) => {
             );
         }
         // Иначе делаем реальный запрос
-        const url = `${SERVER_URL}/${tg_id}/${number_of_days}`;
+        const url = `${SERVER_URL}/swa?days=${number_of_days}`;
         const response = await fetch(url, {
             headers: getAuthHeader(),
         });
@@ -34,6 +35,7 @@ const useSwaApi = (initDataRaw?: string) => {
     };
 
     // POST-запрос: Изменение статуса
+    // @ts-ignore
     const toggleUserActivityStatus = async (tg_id: number, key: SwaKey): Promise<ToggleStatusResponse> => {
         // Если в режиме разработки, используем мок-функцию
         if (DEV_MODE) {
@@ -44,15 +46,13 @@ const useSwaApi = (initDataRaw?: string) => {
 
 
         // Иначе делаем реальный запрос
-        const url = `${SERVER_URL}/toggle-status`;
+        const url = `${SERVER_URL}/swa/toggle-status?key=${key}`;
         const response = await fetch(url, {
             method: 'POST',
             headers: {
                 ...getAuthHeader(),
                 'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({key, userId: tg_id}),
-
+            }
         });
 
         if (!response.ok) throw new Error(`POST Error: ${response.status}`);
