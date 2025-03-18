@@ -30,7 +30,7 @@ const CurrentActivities: FunctionComponent = () => {
             refresh();
         },
     });
-
+//fix
     const handleToggleStatus = (key: SwaKey) => {
         if (user?.id) {
             toggleUserActivityStatusRun(user?.id, key);
