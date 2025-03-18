@@ -42,8 +42,6 @@ const CurrentActivities: FunctionComponent = () => {
     }
 
     return <div>
-        <div>{initDataRaw}
-        </div>
         <Divider
             style={{
                 border: 'none',
