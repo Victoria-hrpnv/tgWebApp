@@ -13,6 +13,7 @@ const SWAPage: FC = () => {
     const [selectedPeriod, setSelectedPeriod] = useState<"day" | "week" | "month">("day");
 
     // Отображение данных
+
     return (
         <>
             <CapsuleTabs activeKey={selectedPeriod} onChange={(key) => {
@@ -26,18 +27,15 @@ const SWAPage: FC = () => {
                 <CapsuleTabs.Tab key="week" title="Неделя"
                                  style={textColor}
                 >
-                    <SwaActivityView numberOfDays={7}/>
+                    <SwaActivityView numberOfDays={7} period = {selectedPeriod}/>
                 </CapsuleTabs.Tab>
                 <CapsuleTabs.Tab key="month" title="Месяц"
                                  style={textColor}
                 >
-                    <SwaActivityView numberOfDays={30}/>
+                    <SwaActivityView numberOfDays={30} period = {selectedPeriod}/>
                 </CapsuleTabs.Tab>
             </CapsuleTabs>
 
-            {/*<SwaActivityView
-                    onToggleStatus={handleToggleStatus}
-                />*/}
         </>
     );
 };

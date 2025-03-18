@@ -1,3 +1,4 @@
+
 // SwaActivityView.tsx
 import {FC, useEffect, useState} from "react";
 import {Divider, List, Skeleton} from "antd-mobile";
@@ -9,10 +10,11 @@ import useSwaApi from "@/hooks/useSwaApi.ts";
 import {retrieveLaunchParams} from "@telegram-apps/sdk-react";
 
 interface SwaActivityViewProps {
-    numberOfDays: number
+    numberOfDays: number,
+    period: "day" | "week" | "month"
 }
 
-const SwaActivityView: FC<SwaActivityViewProps> = ({numberOfDays}) => {
+const SwaActivityView: FC<SwaActivityViewProps> = ({numberOfDays, period}) => {
     const {initDataRaw} = retrieveLaunchParams();
     const {fetchUserActivity} = useSwaApi(initDataRaw);
     const {user} = useSwaStatus();
@@ -32,7 +34,7 @@ const SwaActivityView: FC<SwaActivityViewProps> = ({numberOfDays}) => {
 
     useEffect(() => {
         refresh()
-    }, []);
+    }, [numberOfDays, period]);
 
     const refresh = () => {
         if (user?.id) {

@@ -5,7 +5,6 @@ import {useSwaStatus} from "@/hooks/useSwaStatus.ts";
 
 const AppHeader = () => {
     const {user, userActivityToday} = useSwaStatus();
-    console.log('user')
     if (user && userActivityToday) {
         const photoUrl = user.photoUrl ? user.photoUrl : 'https://zz-33.ru/assets/templates/zz-33/img/img/slide-4-background-1.png'
         return <List>

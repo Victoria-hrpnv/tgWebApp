@@ -2,7 +2,6 @@
 import {SwaKey, SwaResponse, ToggleStatusResponse} from '../types/swa';
 import {getMockData, mockToggleStatus} from '../utils/mockSwaData.ts';
 
-
 const SERVER_URL = import.meta.env.VITE_API_URL;
 const DEV_MODE = import.meta.env.VITE_DEV_MODE === 'development'; // Проверка режима разработки
 

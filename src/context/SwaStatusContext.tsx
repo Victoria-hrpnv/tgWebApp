@@ -45,7 +45,6 @@ export const SwaStatusProvider: React.FC<{ children: ReactNode }> = ({children})
 
     const refresh = () => {
         console.log("refreshing the data")
-
         if (initDataState?.user?.id) {
             refreshData(initDataState?.user?.id, 0)
         }
