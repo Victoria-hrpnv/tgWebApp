@@ -34,7 +34,7 @@ const SwaActivityView: FC<SwaActivityViewProps> = ({numberOfDays, period}) => {
 
     useEffect(() => {
         refresh()
-    }, [numberOfDays, period]);
+    }, [period]);
 
     const refresh = () => {
         if (user?.id) {
