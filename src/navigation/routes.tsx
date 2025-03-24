@@ -6,7 +6,7 @@ import {LaunchParamsPage} from '@/pages/AdminPage/LaunchParamsPage.tsx';
 import {ThemeParamsPage} from '@/pages/AdminPage/ThemeParamsPage.tsx';
 import {TONConnectPage} from '@/pages/TONConnectPage/TONConnectPage';
 import SWAPage from "@/pages/SWAPage.tsx";
-import KiberniktoVideoCall from "@/components/heygen/KiberniktoVideoCall.tsx";
+
 
 interface Route {
     path: string;
@@ -18,7 +18,7 @@ interface Route {
 export const routes: Route[] = [
     {path: '/', Component: SWAPage},
     {path: '/admin', Component: AdminPage},
-    {path: '/video', Component: KiberniktoVideoCall},
+
     {path: '/init-data', Component: InitDataPage, title: 'Init Data'},
     {path: '/theme-params', Component: ThemeParamsPage, title: 'Theme Params'},
     {path: '/launch-params', Component: LaunchParamsPage, title: 'Launch Params'},

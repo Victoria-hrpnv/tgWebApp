@@ -5,7 +5,7 @@ import ruRU from "antd-mobile/es/locales/ru-RU";
 import {ConfigProvider, ErrorBlock} from "antd-mobile";
 import AppHeader from "@/components/AppHeader.tsx";
 import {SwaStatusProvider} from '@/context/SwaStatusContext';
-import {KiberniktoProvider} from "@/context/KiberniktoContext.tsx";
+
 
 export function App() {
     const lp = useLaunchParams();
@@ -22,7 +22,7 @@ export function App() {
     return (
         <ConfigProvider locale={ruRU}>
             <SwaStatusProvider>
-                <KiberniktoProvider>
+
                     <AppHeader/>
                     <HashRouter>
                         <Routes>
@@ -30,7 +30,7 @@ export function App() {
                             <Route path="*" element={<Navigate to="/"/>}/>
                         </Routes>
                     </HashRouter>
-                </KiberniktoProvider>
+
             </SwaStatusProvider>
         </ConfigProvider>
 
